@@ -1,14 +1,14 @@
-# Changelog
+# 更新日志
 
-All notable changes to this project will be documented in this file.
+本文件记录项目的重要变更。
 
 ## 0.1.0 - 2026-07-03
 
-### Added
+### 新增
 
-- Initial Claude Code skill for generating Feishu/Lark Base exam management systems.
-- Canonical question-bank schema for Markdown, CSV, and Excel-style inputs.
-- Default generated Base schema with answer summary, standard answer table, form, views, and dashboard.
-- Hybrid formula scoring strategy.
-- Tested `lark-cli base +...` command flow.
-- Troubleshooting notes for form title updates, Windows/Git Bash JSON encoding, formula creation, and dashboard configuration.
+- 初始 Claude Code Skill：根据题库生成飞书 / Lark 多维表格考试管理系统。
+- 支持 Markdown、CSV 和 Excel 风格输入的 canonical 题库结构。
+- 默认生成 Base 结构：标准答案分值表、答卷汇总表、表单、视图和看板。
+- 混合公式判分策略。
+- 经过真实测试的 `lark-cli base +...` 命令流程。
+- 故障排查说明：表单题目标题更新、Windows/Git Bash JSON 编码、公式字段创建和 Dashboard 配置。

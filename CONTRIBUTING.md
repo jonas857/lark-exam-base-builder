@@ -1,32 +1,34 @@
-# Contributing
+# 贡献指南
 
-Contributions are welcome.
+欢迎贡献。
 
-## Scope
+## 项目范围
 
-This repository contains a Claude Code skill for generating Feishu/Lark Base exam management systems. Good contributions include:
+本仓库是一个 Claude Code Skill，用于根据题库生成飞书 / Lark 多维表格考试管理系统。适合贡献的内容包括：
 
-- improved question-bank parsing rules;
-- updated `lark-cli base +...` command examples;
-- tested formula patterns;
-- troubleshooting notes for Feishu/Lark Base API behavior;
-- support for additional question types or normalized schemas.
+- 更完善的题库解析规则；
+- 更新后的 `lark-cli base +...` 命令示例；
+- 经过真实验证的公式写法；
+- 飞书多维表格 API / CLI 行为的故障排查记录；
+- 新题型支持；
+- 规范化表结构设计，例如“题库表 + 答卷表 + 答题明细表”。
 
-## Development workflow
+## 开发流程
 
-1. Update `SKILL.md` for user-facing skill behavior.
-2. Update files in `references/` for detailed implementation notes.
-3. Keep examples in `references/examples/` small and safe.
-4. Do not commit secrets, tokens, private Base URLs, or user data.
+1. 修改 `SKILL.md` 来更新用户可见的 Skill 行为。
+2. 修改 `references/` 中的文档来补充具体实现细节。
+3. `references/examples/` 中的示例应保持简短、安全、可公开。
+4. 不要提交密钥、token、私有 Base URL、真实题库、真实答卷或用户数据。
 
-## Testing checklist
+## 测试检查清单
 
-Before proposing changes, check whether the docs still answer:
+提交修改前，请确认文档仍然能回答以下问题：
 
-- How should a question bank be normalized?
-- What resources will be created?
-- What commands are used and in what order?
-- What must be confirmed before creating or deleting persistent Lark resources?
-- How should partial failures be reported?
+- 题库应该如何规范化？
+- 会创建哪些飞书 Base 资源？
+- 使用哪些命令，执行顺序是什么？
+- 创建或删除持久化飞书资源前，需要确认什么？
+- 表单题目标题、选项、公式和看板配置是否有明确说明？
+- 出现部分失败时，应该如何报告和恢复？
 
-If you test against a real Feishu/Lark Base, redact private tokens and URLs before opening an issue or pull request.
+如果你使用真实飞书 / Lark Base 做测试，请在提交 issue 或 PR 前移除或打码私有 token、URL、用户数据和内部题库内容。

@@ -1,21 +1,23 @@
 # lark-exam-base-builder
 
-A Claude Code skill for building a Feishu/Lark Base exam management micro-system from a question bank.
+一个用于 **Claude Code** 的飞书 / Lark 多维表格考试系统构建 Skill：根据题库自动创建飞书 Base 考试管理微系统。
 
-This skill turns Markdown, CSV, Excel-style, or pasted exam questions into a Lark Base structure with:
+它可以把 Markdown、CSV、Excel 风格表格或直接粘贴的题库，转换成一套可用的飞书多维表格考试系统，包括：
 
-- a standard answer and score table;
-- an answer submission table;
-- an answer form;
-- automatic per-question scoring formulas;
-- total score and pass/fail calculation;
-- answer summary and failing-student views;
-- an optional exam dashboard.
+- 标准答案与分值表；
+- 答卷汇总表；
+- 答题表单；
+- 每题自动判分公式；
+- 总分与是否及格计算；
+- 答卷汇总视图和不及格名单视图；
+- 可选的考试看板。
 
-## What it creates
+> English summary: A Claude Code skill for building Feishu/Lark Base exam management systems from question banks.
+
+## 会创建什么
 
 ```text
-{Exam Name}管理微系统
+{考试名称}管理微系统
 ├── 答卷汇总表
 │   ├── 答卷汇总
 │   ├── 不及格名单
@@ -27,24 +29,24 @@ This skill turns Markdown, CSV, Excel-style, or pasted exam questions into a Lar
     └── 考试及格情况
 ```
 
-## Supported question types
+## 支持的题型
 
-| Type | Canonical value | Form field | Scoring |
+| 题型 | 规范值 | 表单字段 | 判分方式 |
 |---|---|---|---|
-| 单选 | `single` | select, single choice | exact match |
-| 多选 | `multiple` | select, multiple choice | exact set match where supported |
-| 判断 | `boolean` | select, single choice | exact match: 正确/错误 |
+| 单选 | `single` | 单选 select | 精确匹配 |
+| 多选 | `multiple` | 多选 select | 支持时按选项集合完全一致判分 |
+| 判断 | `boolean` | 单选 select | `正确` / `错误` 精确匹配 |
 
-Unsupported question types, such as fill-in-the-blank or essay questions, should be skipped, converted to manual scoring, or handled by a future normalized schema.
+填空题、问答题等暂不作为 v1 自动判分题型。遇到这类题目时，建议跳过、转为人工判分，或后续改用规范化的“题库表 + 答卷表 + 答题明细表”结构。
 
-## Requirements
+## 使用前提
 
-- Claude Code
-- `lark-cli`
-- A Feishu/Lark account authenticated in `lark-cli`
-- Permissions to create and edit Lark Base resources
+- 已安装 Claude Code；
+- 已安装 `lark-cli`；
+- 已在 `lark-cli` 中登录飞书 / Lark 账号；
+- 当前账号有创建和编辑飞书多维表格资源的权限。
 
-The skill is designed around `lark-cli base +...` shortcut commands, for example:
+本 Skill 使用 `lark-cli base +...` 快捷命令，例如：
 
 ```bash
 lark-cli base +base-create
@@ -56,19 +58,19 @@ lark-cli base +form-questions-update
 lark-cli base +dashboard-create
 ```
 
-## Installation
+## 安装
 
-Clone this repository into your Claude Code skills directory:
+将仓库克隆到 Claude Code 的 skills 目录：
 
 ```bash
 git clone https://github.com/jonas857/lark-exam-base-builder.git ~/.claude/skills/lark-exam-base-builder
 ```
 
-Restart Claude Code or reload skills if needed.
+如有需要，重启 Claude Code 或重新加载 skills。
 
-## Usage examples
+## 使用示例
 
-Ask Claude Code something like:
+可以这样对 Claude Code 说：
 
 ```text
 根据这份题库创建飞书考试系统
@@ -82,24 +84,24 @@ Ask Claude Code something like:
 创建企业培训考试管理微系统，包含答卷汇总、不及格名单和考试看板
 ```
 
-The skill should then:
+Skill 的标准流程是：
 
-1. parse the question bank into the canonical schema;
-2. validate question numbers, options, answers, scores, and pass line;
-3. show a creation plan;
-4. ask for confirmation before creating persistent Feishu/Lark resources;
-5. create Base tables, fields, views, form, formulas, and dashboard;
-6. report created URLs/IDs and any partial failures.
+1. 将题库解析为统一的 canonical schema；
+2. 校验题号、题型、选项、答案、分值和及格线；
+3. 展示创建计划；
+4. 在创建飞书持久化资源前请求用户确认；
+5. 创建 Base、表、字段、视图、表单、公式和看板；
+6. 返回创建结果、URL / ID，以及任何部分失败信息。
 
-## Input format
+## 输入格式
 
-See:
+详见：
 
 - [`references/exam-question-format.md`](references/exam-question-format.md)
 - [`references/examples/sample-questions.md`](references/examples/sample-questions.md)
 - [`references/examples/sample-questions.csv`](references/examples/sample-questions.csv)
 
-Minimal Markdown example:
+最小 Markdown 示例：
 
 ```markdown
 # 飞书培训考试题库
@@ -120,40 +122,45 @@ D. 一站式企业协作平台
 解析：飞书是一站式企业协作平台。
 ```
 
-## Design notes
+## 设计说明
 
-The default implementation uses **hybrid formula mode**:
+默认采用 **混合公式模式（hybrid formula mode）**：
 
-- `标准答案分值表` stores the normalized question bank, answers, scores, and explanations for humans.
-- `答卷汇总表` computes scores directly with generated formula fields.
+- `标准答案分值表` 保存规范化题库、标准答案、分值和解析，便于人工查看和维护；
+- `答卷汇总表` 使用自动生成的 formula 字段直接判分。
 
-This is more robust for automated generation than lookup-based scoring, especially when dealing with select options and multi-select answers.
+相比 lookup 判分，这种方式在自动化生成时更稳定，尤其适合处理 select 选项同步、多选题和字段命名问题。
 
-## Important implementation details
+## 重要实现细节
 
-The reference docs include several tested operational details:
+参考文档中记录了真实端到端测试得到的操作经验：
 
-- use `lark-cli base +...` shortcuts only;
-- add `--as user` to Base commands unless bot identity is explicitly requested;
-- use relative `@./file.json` paths for large `--json` and `--fields` payloads;
-- `+form-questions-update --questions` expects inline JSON and does not support `@file`;
-- on Windows/Git Bash, generate inline form JSON with `ensure_ascii=True` to avoid Chinese mojibake;
-- formula field creation may require `--i-have-read-guide`;
-- answer table field names may be short, but form titles must be updated to full question stems;
-- dashboard `group_by.sort` should include both `type` and `order`.
+- 只使用 `lark-cli base +...` 快捷命令；
+- 除非用户明确要求 bot 身份，否则 Base 命令默认加 `--as user`；
+- 大型 `--json` / `--fields` 参数优先使用当前目录相对路径，例如 `@./file.json`；
+- `+form-questions-update --questions` 需要传入行内 JSON 字符串，不支持 `@file`；
+- Windows / Git Bash 下更新表单中文标题时，建议用 `ensure_ascii=True` 生成 JSON，避免中文乱码；
+- 创建公式字段时可能需要 `--i-have-read-guide`；
+- 答卷表字段名可以短，但表单题目标题必须更新为完整题干；
+- Dashboard 的 `group_by.sort` 应同时包含 `type` 和 `order`。
 
-## Documentation map
+## 文档索引
 
-- [`SKILL.md`](SKILL.md) — Claude Code skill entrypoint and workflow.
-- [`references/base-schema.md`](references/base-schema.md) — generated Base schema.
-- [`references/exam-question-format.md`](references/exam-question-format.md) — accepted input formats and canonical JSON.
-- [`references/scoring-formulas.md`](references/scoring-formulas.md) — formula strategy and tested formula shapes.
-- [`references/lark-cli-command-flow.md`](references/lark-cli-command-flow.md) — command order and CLI caveats.
-- [`references/troubleshooting.md`](references/troubleshooting.md) — known failures and recovery steps.
+- [`SKILL.md`](SKILL.md) — Claude Code Skill 入口和主流程。
+- [`references/base-schema.md`](references/base-schema.md) — 生成的 Base 结构设计。
+- [`references/exam-question-format.md`](references/exam-question-format.md) — 支持的题库格式与 canonical JSON。
+- [`references/scoring-formulas.md`](references/scoring-formulas.md) — 判分公式策略和已验证公式格式。
+- [`references/lark-cli-command-flow.md`](references/lark-cli-command-flow.md) — CLI 命令顺序和注意事项。
+- [`references/troubleshooting.md`](references/troubleshooting.md) — 常见问题与恢复方案。
 
-## Safety
+## 安全说明
 
-This skill creates persistent Feishu/Lark resources. It should always ask for explicit confirmation before creating resources and should not delete existing Base resources unless the user confirms the exact target.
+本 Skill 会创建飞书 / Lark 持久化资源，因此应始终遵守：
+
+- 创建资源前必须让用户确认；
+- 删除、隐藏或覆盖已有资源前必须确认具体目标；
+- 如出现部分失败，需要如实报告已经创建了什么、还有什么需要手动完成；
+- 不要公开飞书 token、私有 Base 链接、真实答卷、员工或学生数据。
 
 ## License
 

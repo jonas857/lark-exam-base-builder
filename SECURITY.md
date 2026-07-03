@@ -1,26 +1,26 @@
-# Security Policy
+# 安全策略
 
-## Reporting a vulnerability
+## 漏洞反馈
 
-If you discover a security issue in this skill, please open a private report through GitHub's vulnerability reporting features if available, or contact the repository owner directly.
+如果你发现这个 Skill 存在安全问题，请优先使用 GitHub 的私密漏洞报告功能；如果不可用，请直接联系仓库维护者。
 
-## Sensitive data
+## 敏感数据
 
-Do not include any of the following in issues, pull requests, examples, or test fixtures:
+请不要在 issue、PR、示例或测试文件中包含以下内容：
 
-- Feishu/Lark access tokens;
-- private Base tokens or URLs;
-- OAuth credentials;
-- personal exam submissions;
-- real student or employee data;
-- internal question banks that are not intended to be public.
+- 飞书 / Lark access token；
+- 私有 Base token 或 URL；
+- OAuth 凭证；
+- 个人考试提交记录；
+- 真实学生、员工或客户数据；
+- 不应公开的内部题库。
 
-## Operational safety
+## 操作安全
 
-This skill creates persistent Feishu/Lark resources. Implementations and examples should preserve these rules:
+本 Skill 会创建飞书 / Lark 持久化资源。实现和示例应始终遵守：
 
-- ask for explicit confirmation before creating resources;
-- ask for explicit confirmation before deleting or hiding existing resources;
-- report partial failures accurately;
-- prefer user identity with `--as user` unless bot identity is explicitly requested;
-- do not publish generated exam data unless the user has explicitly authorized publication.
+- 创建资源前必须显式征得用户确认；
+- 删除、隐藏或覆盖已有资源前必须确认具体目标；
+- 准确报告部分失败，不要把失败步骤说成已完成；
+- 除非用户明确要求 bot 身份，否则优先使用 `--as user`；
+- 未经用户明确授权，不要公开生成的考试数据或飞书资源链接。
